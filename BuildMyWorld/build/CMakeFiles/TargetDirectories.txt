@@ -1,0 +1,3 @@
+/home/krithika/Documents/workspace/BuildMyWorld/build/CMakeFiles/rebuild_cache.dir
+/home/krithika/Documents/workspace/BuildMyWorld/build/CMakeFiles/hello.dir
+/home/krithika/Documents/workspace/BuildMyWorld/build/CMakeFiles/edit_cache.dir
