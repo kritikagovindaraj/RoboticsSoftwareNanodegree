@@ -10,7 +10,7 @@ The purpose of this lab is to learn how to build an environment that can house t
     │   ├── Building
     │   │   ├── model.config
     │   │   ├── model.sdf
-    │   ├── HumanoidRobot
+    │   ├── 4wheelWithGripper
     │   │   ├── model.config
     │   │   ├── model.sdf
     ├── script                         # Gazebo World plugin C++ script      
