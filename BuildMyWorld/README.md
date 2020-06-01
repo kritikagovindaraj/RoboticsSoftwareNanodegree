@@ -1,4 +1,3 @@
-[![Udacity - Robotics NanoDegree Program]
 
 # Build My World
 The purpose of this lab is to learn how to build an environment that can house the two-wheeled robot model with the Model Editor tool in Gazebo. This world consists of the two-wheeled model and the custom building. A plugin is also included to interact with this world.  
