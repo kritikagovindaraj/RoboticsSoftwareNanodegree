@@ -1,4 +1,4 @@
-
+[![Udacity - Robotics NanoDegree Program]
 
 # Build My World
 The purpose of this lab is to learn how to build an environment that can house the two-wheeled robot model with the Model Editor tool in Gazebo. This world consists of the two-wheeled model and the custom building. A plugin is also included to interact with this world.  
@@ -10,7 +10,7 @@ The purpose of this lab is to learn how to build an environment that can house t
     │   ├── Building
     │   │   ├── model.config
     │   │   ├── model.sdf
-    │   ├── 4wheelWithGripper
+    │   ├── HumanoidRobot
     │   │   ├── model.config
     │   │   ├── model.sdf
     ├── script                         # Gazebo World plugin C++ script      
@@ -49,7 +49,7 @@ $ gazebo office
 ```
 
 ### Output
-The welcome message and the two-wheeled robot inside a Gazebo World should both launch as follow: 
+The hello world message and the two-wheeled robot inside a Gazebo World should both launch as follow: 
 ![alt text](images/output.png)
 
 
