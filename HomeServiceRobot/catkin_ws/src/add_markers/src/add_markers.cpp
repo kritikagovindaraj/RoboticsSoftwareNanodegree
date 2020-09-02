@@ -3,18 +3,20 @@
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <visualization_msgs/Marker.h>
 
-double robot_x_, robot_y_;
+
 double DISTANCE_THRESHOLD = 0.01;
-double PICKUP_X = 7.5, PICKUP_Y = 10.0;
-double DROPOFF_X = -10.0, DROPOFF_Y = 6.0;
+double PICKUP_X = 2.0, PICKUP_Y = 2.0;
+double DROPOFF_X = -2.0, DROPOFF_Y = 3.0;
+double robot_x_, robot_y_;
+
 int WAIT_TIME = 5;
 int current_wait_ = 0;
 
-void robotPoseCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msg_amcl)
+void robotPoseCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &amcl_msg)
 {
   // Update robot position
-  robot_x_ = msg_amcl->pose.pose.position.x;
-  robot_y_ = msg_amcl->pose.pose.position.y;
+  robot_x_ = amcl_msg->pose.pose.position.x;
+  robot_y_ = amcl_msg->pose.pose.position.y;
 }
 
 int main(int argc, char **argv)
@@ -28,39 +30,39 @@ int main(int argc, char **argv)
   // Set our initial shape type to be a cube
   uint32_t shape = visualization_msgs::Marker::CUBE;
 
-  visualization_msgs::Marker marker;
+  visualization_msgs::Marker mark;
   // Set the frame ID and timestamp.  See the TF tutorials for information on these.
-  marker.header.frame_id = "map";
-  marker.header.stamp = ros::Time::now();
+  mark.header.frame_id = "map";
+  mark.header.stamp = ros::Time::now();
 
   // Set the namespace and id for this marker.  This serves to create a unique ID
   // Any marker sent with the same namespace and id will overwrite the old one
-  marker.ns = "basic_shapes";
-  marker.id = 0;
+  mark.ns = "basic_shapes";
+  mark.id = 0;
 
   // Set the marker type.  Initially this is CUBE, and cycles between that and SPHERE, ARROW, and CYLINDER
-  marker.type = shape;
+  mark.type = shape;
 
   // Set marker orientation
-  marker.pose.orientation.x = 0.0;
-  marker.pose.orientation.y = 0.0;
-  marker.pose.orientation.z = 0.0;
-  marker.pose.orientation.w = 1.0;
+  mark.pose.orientation.x = 0.0;
+  mark.pose.orientation.y = 0.0;
+  mark.pose.orientation.z = 0.0;
+  mark.pose.orientation.w = 1.0;
 
   // Set the scale of the marker -- 1x1x1 here means 1m on a side
-  marker.scale.x = 0.3;
-  marker.scale.y = 0.3;
-  marker.scale.z = 0.3;
+  mark.scale.x = 0.3;
+  mark.scale.y = 0.3;
+  mark.scale.z = 0.3;
 
   // Set the color -- be sure to set alpha to something non-zero!
-  marker.color.r = 0.0f;
-  marker.color.g = 0.0f;
-  marker.color.b = 1.0f;
-  marker.color.a = 1.0;
+  mark.color.r = 0.0f;
+  mark.color.g = 0.0f;
+  mark.color.b = 1.0f;
+  mark.color.a = 1.0;
 
-  marker.pose.position.z = 0;
+  mark.pose.position.z = 0;
 
-  marker.lifetime = ros::Duration();
+  mark.lifetime = ros::Duration();
 
   // Subscribe to /amcl_pose
   ros::Subscriber sub1 = n.subscribe("/amcl_pose", 1000, robotPoseCallback);
@@ -77,14 +79,16 @@ int main(int argc, char **argv)
 
       if (pickup_distance > DISTANCE_THRESHOLD)
       {
-        marker.action = visualization_msgs::Marker::ADD;
-        marker.pose.position.x = PICKUP_X;
-        marker.pose.position.y = PICKUP_Y;
+        mark.action = visualization_msgs::Marker::ADD;
+        mark.pose.position.x = PICKUP_X;
+        mark.pose.position.y = PICKUP_Y;
       }
       else
       {
         state = 1;
-        marker.action = visualization_msgs::Marker::DELETE;
+        mark.action = visualization_msgs::Marker::DELETE;
+        ROS_INFO("object was picked up");
+        ros::Duration(2.0).sleep();
       }
     }
 
@@ -107,18 +111,20 @@ int main(int argc, char **argv)
 
       if (dropoff_distance > DISTANCE_THRESHOLD)
       {
-        marker.action = visualization_msgs::Marker::DELETE;
+        mark.action = visualization_msgs::Marker::DELETE;
       }
       else
       {
-        marker.action = visualization_msgs::Marker::ADD;
-        marker.pose.position.x = DROPOFF_X;
-        marker.pose.position.y = DROPOFF_Y;
+        mark.action = visualization_msgs::Marker::ADD;
+        mark.pose.position.x = DROPOFF_X;
+        mark.pose.position.y = DROPOFF_Y;
+        ROS_INFO("object was dropped up");
+        ros::Duration(2.0).sleep();
       }
     }
 
     // Publish the Marker
-    marker_pub.publish(marker);
+    marker_pub.publish(mark);
 
     // Sleep for 1 seconds
     sleep(1);
