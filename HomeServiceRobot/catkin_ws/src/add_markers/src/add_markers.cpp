@@ -4,10 +4,10 @@
 #include <visualization_msgs/Marker.h>
 
 
-double DISTANCE_THRESHOLD = 0.01;
+double distance_threshold = 0.01;
 double PICKUP_X = 2.0, PICKUP_Y = 2.0;
 double DROPOFF_X = -2.0, DROPOFF_Y = 3.0;
-double robot_x_, robot_y_;
+double robot_x, robot_y;
 
 int WAIT_TIME = 5;
 int current_wait_ = 0;
@@ -15,8 +15,8 @@ int current_wait_ = 0;
 void robotPoseCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &amcl_msg)
 {
   // Update robot position
-  robot_x_ = amcl_msg->pose.pose.position.x;
-  robot_y_ = amcl_msg->pose.pose.position.y;
+  robot_x = amcl_msg->pose.pose.position.x;
+  robot_y = amcl_msg->pose.pose.position.y;
 }
 
 int main(int argc, char **argv)
@@ -75,9 +75,9 @@ int main(int argc, char **argv)
     if (state == 0)
     {
       // Calculate manhattan distance
-      double pickup_distance = abs(robot_x_ - PICKUP_X) + abs(robot_y_ - PICKUP_Y);
+      double pickup_distance = abs(robot_x - PICKUP_X) + abs(robot_y - PICKUP_Y);
 
-      if (pickup_distance > DISTANCE_THRESHOLD)
+      if (pickup_distance > distance_threshold)
       {
         mark.action = visualization_msgs::Marker::ADD;
         mark.pose.position.x = PICKUP_X;
@@ -107,9 +107,9 @@ int main(int argc, char **argv)
     else if (state == 2)
     {
       // Calculate manhattan distance
-      double dropoff_distance = abs(robot_x_ - DROPOFF_X) + abs(robot_y_ - DROPOFF_Y);
+      double dropoff_distance = abs(robot_x - DROPOFF_X) + abs(robot_y - DROPOFF_Y);
 
-      if (dropoff_distance > DISTANCE_THRESHOLD)
+      if (dropoff_distance > distance_threshold)
       {
         mark.action = visualization_msgs::Marker::DELETE;
       }
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
         mark.action = visualization_msgs::Marker::ADD;
         mark.pose.position.x = DROPOFF_X;
         mark.pose.position.y = DROPOFF_Y;
-        ROS_INFO("object was dropped up");
+        ROS_INFO("object was dropped off");
         ros::Duration(2.0).sleep();
       }
     }
