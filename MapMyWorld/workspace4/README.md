@@ -150,7 +150,7 @@ Directory Structure
 ## Run the project  
 * Clone this repository
 ```
-
+https://github.com/kritikagovindaraj/RoboticsSoftwareNanodegree/tree/master/MapMyWorld/workspace4/catkin_ws
 ```
 * Open the repository and make  
 ```
