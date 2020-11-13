@@ -1,10 +1,27 @@
-# Where Am I
-Project 3 of Udacity Robotics Software Engineer Nanodegree Program  
+# Home Service Robot
+Project 5 of Udacity Robotics Software Engineer Nanodegree 
+
 ## Overview  
-In this project you'll utilize ROS AMCL package to accurately localize a mobile robot inside a map in the Gazebo simulation environments. Here are the steps to learn several aspects of robotic software engineering with a focus on ROS:  
-* Create a ROS package that launches a custom robot model in a custom Gazebo world  
-* Utilize the ROS AMCL package and the Tele-Operation / Navigation Stack to localize the robot  
-* Explore, add, and tune specific parameters corresponding to each package to achieve the best possible localization results  
+In this project, you will use everything you learned in the Nanodegree Program to build a Home Service Robot in ROS.  
+### Mapping  
+You will create a `test_slam.sh` script file and launch it to manually test SLAM.  
+A functional map of the environment should be created which would be used for localization and navigation tasks.  
+### Localization and Navigation  
+You will create a `test_navigation.sh` script file to launch it for manual navigation test.  
+Your robot should be able to navigate in the environment after a 2D Nav Goal command is issued.  
+You will create a `pick_objects.sh` file that will send multiple goals for the robot to reach.  
+The robot travels to the desired pickup zone, displays a message that it reached its destination, waits 5 seconds, travels to the desired drop off zone, and displays a message that it reached the drop off zone."  
+### Home Service Functions  
+You will create a `add_marker.sh` file that will publish a marker to rviz.  
+The marker should initially be published at the pickup zone. After 5 seconds it should be hidden. Then after another 5 seconds it should appear at the drop off zone.
+The student should write a home_service.sh file that will run all the nodes in this project.  
+The student's home service robot should be simulated as follow:  
+* Initially show the marker at the pickup zone.
+* Hide the marker once your robot reach the pickup zone.
+* Wait 5 seconds to simulate a pickup.
+* Show the marker at the drop off zone once your robot reaches it.
+
+
 ## Prerequisites/Dependencies  
 * Gazebo >= 7.0  
 * ROS Kinetic  
@@ -32,123 +49,123 @@ sudo apt-get install ros-kinetic-amcl
   * Linux: gcc / g++ is installed by default on most Linux distros
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
   * Windows: recommend using [MinGW](http://www.mingw.org/)
+
+
 ## Setup Instructions (abbreviated)  
 1. Meet the `Prerequisites/Dependencies`  
 2. Open Ubuntu Bash and clone the project repository  
-3. On the command line execute  
+3. On the command line and execute  
 ```bash
 sudo apt-get update && sudo apt-get upgrade -y
 ```
-4. Build and run your code.  
+4. On the command line and execute  
+```
+cd RoboND-Term1-P5-Home-Service-Robot/catkin_ws/src  
+git clone https://github.com/ros-perception/slam_gmapping.git  
+git clone https://github.com/turtlebot/turtlebot.git  
+git clone https://github.com/turtlebot/turtlebot_interactions.git  
+git clone https://github.com/turtlebot/turtlebot_simulator.git  
+```
+5. Build and run your code.  
+
 ## Project Description  
 Directory Structure  
 ```
-.Where-Am-I                                    # Where Am I Project
-├── catkin_ws                                  # Catkin workspace
+.Home-Sevice-Robot                                        # Home Service Robot Project
+├── catkin_ws                                             # Catkin workspace
 │   ├── src
-│   │   ├── ball_chaser                        # ball_chaser package        
-│   │   │   ├── launch                         # launch folder for launch files
-│   │   │   │   ├── ball_chaser.launch
-│   │   │   ├── src                            # source folder for C++ scripts
-│   │   │   │   ├── drive_bot.cpp
-│   │   │   │   ├── process_images.cpp
-│   │   │   ├── srv                            # service folder for ROS services
-│   │   │   │   ├── DriveToTarget.srv
-│   │   │   ├── CMakeLists.txt                 # compiler instructions
-│   │   │   ├── package.xml                    # package info
-│   │   ├── my_robot                           # my_robot package        
-│   │   │   ├── config                         # config folder for configuration files   
-│   │   │   │   ├── base_local_planner_params.yaml
-│   │   │   │   ├── costmap_common_params.yaml
-│   │   │   │   ├── global_costmap_params.yaml
-│   │   │   │   ├── local_costmap_params.yaml
-│   │   │   ├── launch                         # launch folder for launch files   
-│   │   │   │   ├── amcl.launch
-│   │   │   │   ├── robot_description.launch
-│   │   │   │   ├── world.launch
-│   │   │   ├── maps                           # maps folder for maps
-│   │   │   │   ├── map.pgm
-│   │   │   │   ├── map.yaml
-│   │   │   ├── meshes                         # meshes folder for sensors
-│   │   │   │   ├── hokuyo.dae
-│   │   │   ├── rviz                           # rviz folder for rviz configuration files
-│   │   │   │   ├── default.rviz
-│   │   │   ├── urdf                           # urdf folder for xarco files
-│   │   │   │   ├── my_robot.gazebo
-│   │   │   │   ├── my_robot.xacro
-│   │   │   ├── worlds                         # world folder for world files
-│   │   │   │   ├── empty.world
-│   │   │   │   ├── office.world
-│   │   │   ├── CMakeLists.txt                 # compiler instructions
-│   │   │   ├── package.xml                    # package info
-│   │   ├── pgm_map_creator                    # Create pgm map from Gazebo world file for ROS localization
-│   │   │   ├── maps
-│   │   │   │   ├── map.pgm                    # map files of office.world, generated by pgm_map_creator
-├── my_ball                                    # Model files 
-│   ├── model.config
-│   ├── model.sdf
-├── video.gif                                  # Video gif
-├── video.mp4                                  # Video fle
-``` 
-- [drive_bot.cpp](/catkin_ws/src/ball_chaser/src/drive_bot.cpp): ROS service C++ script, command the robot with specify speeds.  
-- [process_images.cpp](/catkin_ws/src/ball_chaser/src/process_images.cpp): ROS service C++ script, process the camera image and return requested speeds.   
-- [robot_description.launch](/catkin_ws/src/my_robot/launch/robot_description.launch): Create robot model in Gazebo world.  
-- [hokuyo.dae](/catkin_ws/src/my_robot/meshes/hokuyo.dae): Hokuyo LiDAR sensor mesh model.  
-- [my_robot.gazebo](/catkin_ws/src/my_robot/urdf/my_robot.gazebo): Define my_robot URDF model plugins.  
-- [my_robot.xacro](/catkin_ws/src/my_robot/urdf/my_robot.xacro): Define my_robot URDF model.  
-- [amcl.launch](/catkin_ws/src/my_robot/launch/amcl.launch): Launch AMCL node
-- [map.pgm](/catkin_ws/src/my_robot/maps/map.pgm): Generated myoffice map
-- [map.yaml](/catkin_ws/src/my_robot/maps/map.yaml): Info for myoffice map
-- [default.rviz](/catkin_ws/src/my_robot/rviz/default.rviz): Default rviz
-- [map.pgm](/catkin_ws/src/pgm_map_creator/maps/map.pgm): Generated office map
+│   │   ├── add_markers                                   # add_markers package        
+│   │   │   ├── launch
+│   │   │   │   ├── view_home_service_navigation.launch   # launch file for home service robot demo
+│   │   │   ├── src
+│   │   │   │   ├── add_markers.cpp                       # source code for add_markers node
+│   │   │   │   ├── add_markers_demo.cpp                  # source code for add_markers_demo
+│   │   ├── pick_objects                                  # pick_objects package     
+│   │   │   ├── src
+│   │   │   │   ├── pick_objects.cpp                      # source code for pick_objects node
+│   │   │   │   ├── pick_objects_demo.cpp                 # source code for pick_objects_demo
+│   │   ├── rvizConfig                                    # rvizConfig package        
+│   │   │   ├── home_service_rvizConfig.rviz              # rvizConfig file for home service robot demo  
+│   │   ├── scripts                                       # shell scripts files
+│   │   │   ├── add_marker.sh                             # shell script to model virtual objects  
+│   │   │   ├── home_service.sh                           # shell script to launch home service robot demo  
+│   │   │   ├── pick_objects.sh                           # shell script to send multiple goals  
+│   │   │   ├── test_navigation.sh                        # shell script to test localization and navigation
+│   │   │   ├── test_slam.sh                              # shell script to test SLAM
+│   │   ├── slam_gmapping                                 # gmapping_demo.launch file
+│   │   ├── turtlebot                                     # keyboard_teleop.launch file
+│   │   ├── turtlebot_interactions                        # view_navigation.launch file
+│   │   ├── turtlebot_simulator                           # turtlebot_world.launch file package        
+│   │   ├── CMakeLists.txt                                # compiler instructions
+├── video.mp4                                             # Videos for overview
+├── video.gif                                             # GIF for overview
+```
+- [view_home_service_navigation.launch](/catkin_ws/src/add_markers/launch/view_home_service_navigation.launch): Launch rviz with specify rviz configuration file  
+- [add_markers.cpp](/catkin_ws/src/pick_objects/src/add_markers.cpp): C++ script, communicate with `pick_objects` node and control the marker appearance to simulate object pick up and drop off   
+- [pick_objects.cpp](/catkin_ws/src/pick_objects/src/pick_objects.cpp): C++ script, communicate with `add_markers` node and command the robot to pick up the object  
+- [home_service_rvizConfig.rviz](/catkin_ws/src/rvizConfig/home_service_rvizConfig.rviz): rvizConfig file for home service robot demo which contained `markers` option  
+- [add_marker.sh](/catkin_ws/src/scripts/add_marker.sh): Shell script file to deploy a turtlebot inside your environment, model a virtual object with markers in `rviz`.  
+- [home_service.sh](/catkin_ws/src/scripts/home_service.sh): Shell script file to deploy a turtlebot inside your environment, simulate a full home service robot capable of navigating to pick up and deliver virtual objects.  
+- [pick_objects.sh](/catkin_ws/src/scripts/pick_objects.sh): Shell script file to deploy a turtlebot inside your environment, communicate with the ROS navigation stack and autonomously send successive goals for your robot to reach.  
+- [test_navigation.sh](/catkin_ws/src/scripts/test_navigation.sh): Shell script file to deploy a turtlebot inside your environment, pick two different goals and test your robot's ability to reach them and orient itself with respect to them.  
+- [test_slam.sh](/catkin_ws/src/scripts/test_slam.sh): Shell script file to deploy a turtlebot inside your environment, control it with keyboard commands, interface it with a SLAM package, and visualize the map in `rviz`  
+
+- [CMakeLists.txt](/catkin_ws/src/CMakeLists.txt): File to link the C++ code to libraries.  
+- [video.gif](video.gif): A gif of video for final home service robot run  
 
 ## Run the project  
 * Clone this repository
 ```
-https://github.com/kritikagovindaraj/RoboticsSoftwareNanodegree/tree/master/WhereAmI/workspace3
-```
-* Open the repository and make  
-```
-cd /home/workspace3/WhereAmI/catkin_ws/
-catkin_make
-```
-* Launch my_robot in Gazebo to load both the world and plugins  
-```
-roslaunch my_robot world.launch
-```  
-* Launch amcl node  
-```
-roslaunch my_robot amcl.launch
-```  
-* Testing  
-You have two options to control your robot while it localize itself here:  
-  * Send navigation goal via RViz  
-  * Send move command via teleop package.  
-Navigate your robot, observe its performance and tune your parameters for AMCL.  
 
-**Option 1: Send `2D Navigation Goal`**  
-Your first option would be sending a `2D Nav Goal` from RViz. The `move_base` will try to navigate your robot based on the localization. Based on the new observation and the odometry, the robot to further perform the localization.  
-Click the `2D Nav Goal` button in the toolbar, then click and drag on the map to send the goal to the robot. It will start moving and localize itself in the process. If you would like to give `amcl` node a nudge, you could give the robot an initial position estimate on the map using `2D Pose Estimate`.  
-**Option 2: Use `teleop` Node**  
-You could also use teleop node to control your robot and observe it localize itself in the environment.  
-Open another terminal and launch the `teleop` script:  
 ```
-rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+* Navigate to the `src` folder and clone the necessary repositories  
 ```
-You could control your robot by keyboard commands now.  
+cd RoboND-Term1-P5-Home-Service-Robot/catkin_ws/src  
+git clone https://github.com/ros-perception/slam_gmapping.git  
+git clone https://github.com/turtlebot/turtlebot.git  
+git clone https://github.com/turtlebot/turtlebot_interactions.git  
+git clone https://github.com/turtlebot/turtlebot_simulator.git  
+```
+* Open the repository, make and source  
+```
+cd /home/workspace/catkin_ws/
+catkin_make
+source devel/setup.bash
+```
+* Launch the home service robot
+```
+./src/scripts/home_service.sh
+```
+* Done. 
 
 ## Tips  
 1. It's recommended to update and upgrade your environment before running the code.  
-```bash
+```
 sudo apt-get update && sudo apt-get upgrade -y
 ```
-2. Got an error when launching amcl.launch  
-check the amcl.launch file that you have correctly mapped the topics to the correct published ones  
+2. If your system python version from miniconda is python3 while the ros packages and tf are python2. A hack is to just set the system python to python2 via symbol link. Run the following commands to resolve it  
 ```
-<remap to="scan" from="my_robot/laser/scan"/>  
+ln -s /usr/bin/python2 /root/miniconda3/bin/python
 ```
-
+3. How to setup your environment at start up.  
+```
+Add the following line into the /home/workspace/.student_bashrc
+export PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/dist-packages  
+pip install catkin_pkg  
+pip install rospkg  
+```
+4. How create package with dependencies  
+```
+catkin_create_pkg pick_objects move_base_msgs actionlib roscpp  
+catkin_create_pkg add_markers roscpp visualization_msgs  
+```
+5. How to visualize your marker in the rviz  
+To see the marker(virtual objects) demo, in addition to running the `./add_marker.sh`, you will need to manually add a 'Marker' in rviz with the following steps:  
+* Find your rviz window  
+* In the left bottom panel, click "Add" button  
+* In 'By display type' tab, navigate the tree to 'rviz' then 'Marker'  
+* Click 'OK' button  
+* Done, you should see the marker(virtual objects) appear, disappear then appear again  
 
 ## Code Style  
 Please (do your best to) stick to [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html).
- 
